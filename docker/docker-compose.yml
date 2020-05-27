@@ -1,0 +1,26 @@
+version: '3'
+networks:
+  default:
+    external:
+      name: bank_network
+services:
+  service-bank-php:
+    image: bank_backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - /app/new:/app
+    links:
+      - service-bank-storage
+
+  service-bank-storage:
+    image: postgres:12.2
+    environment:
+      POSTGRES_DB: parser_bank
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: 12345678
+    ports:
+      - '13306:5432'
+    volumes:
+      - /app/postgres:/var/lib/postgresql/data
